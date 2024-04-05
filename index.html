@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quản lý công việc</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+    }
+
+    button {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    .delete-button {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quản lý công việc</h1>
+
+  <input type="text" id="taskInput" placeholder="Nhập công việc">
+  <button id="addButton">Thêm</button>
+
+  <ul id="taskList"></ul>
+
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js"></script>
+  
+
+
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyBitR5QlhcqHc1URHCSF5kvY3mt_ESpuJg",
+  authDomain: "haiduong-d328b.firebaseapp.com",
+  databaseURL: "https://haiduong-d328b-default-rtdb.firebaseio.com",
+  projectId: "haiduong-d328b",
+  storageBucket: "haiduong-d328b.appspot.com",
+  messagingSenderId: "101412564467",
+  appId: "1:101412564467:web:64cf157dab15542f81f686",
+  measurementId: "G-F6BWVL6073"
+};
+firebase.initializeApp(firebaseConfig);
+    // Lấy tham chiếu đến phần tử input và button
+    var taskInput = document.getElementById('taskInput');
+    var addButton = document.getElementById('addButton');
+    var taskList = document.getElementById('taskList');
+
+    // Xử lý sự kiện khi người dùng nhấn nút Thêm
+    addButton.addEventListener('click', function() {
+      var taskText = taskInput.value.trim();
+      if (taskText !== '') {
+        var listItem = document.createElement('li');
+        listItem.textContent = taskText;
+
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Xóa';
+        deleteButton.classList.add('delete-button');
+
+        deleteButton.addEventListener('click', function() {
+          listItem.remove();
+        });
+
+        listItem.appendChild(deleteButton);
+        taskList.appendChild(listItem);
+        firebase.database().ref('tasks').push({
+          text: taskText
+        });
+
+        taskInput.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
